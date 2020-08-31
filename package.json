@@ -1,0 +1,63 @@
+{
+  "name": "typescript-microservice-starter",
+  "version": "1.2.0",
+  "description": "TypeScript microservice starter project.",
+  "main": "build",
+  "author": "Maksim Sinik <maksim@sinik.it>",
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "npm run lint && rimraf ./build",
+    "build": "tsc -p ./tsconfig.json",
+    "update": "npx npm-check -u",
+    "prettier": "prettier --loglevel warn --write \"src/**/*.{ts,tsx}\"",
+    "prelint": "npm run prettier",
+    "lint": "tslint --fix -c tslint.json -t stylish -p ./tsconfig.json",
+    "dev:clean": "rimraf build",
+    "dev:build": "tsc --incremental -p tsconfig.json",
+    "dev:start": "node --inspect -r source-map-support/register -r dotenv/config build/index.js",
+    "dev": "cross-env NODE_ENV=development npm run dev:clean && nodemon -w src -e ts --exec \"npm run dev:build && npm run dev:start\"",
+    "test": "tap test/**/*.ts",
+    "test:watch": "nodemon -e ts -w \"./src\" -w \"./test\" -x \"npm run test\"",
+    "test:report": "npm run test | tee out.tap",
+    "test:reporter": "tap-mocha-reporter xunit < out.tap > junit-testresults.xml"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nucleode/typescript-microservice-starter.git"
+  },
+  "dependencies": {
+    "atob": "^2.1.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-list-endpoints": "^4.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "make-promises-safe": "^5.1.0",
+    "mongoose": "^5.9.21",
+    "query-to-mongo": "^0.10.1",
+    "validator": "^13.1.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/express": "^4.17.7",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/mongoose": "^5.7.36",
+    "@types/node": "^13.13.4",
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
+    "husky": "^4.2.5",
+    "nodemon": "^2.0.3",
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
+    "tap": "^14.10.7",
+    "tap-mocha-reporter": "^5.0.1",
+    "tslint": "^6.1.2",
+    "tslint-config-prettier": "~1.18.0",
+    "typescript": "^3.8.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run test && npm run build"
+    }
+  }
+}
